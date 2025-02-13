@@ -27,7 +27,8 @@ final as (
         orders.order_id,
         orders.customer_id,
         orders.order_date,
-        coalesce(order_payments.amount, 0) as amount
+        coalesce(order_payments.amount, 0) as amount,
+        datediff(day, order_date, {{ dbt.current_timestamp() }}) as days_since_ordered
 
     from orders
     left join order_payments using (order_id)
